@@ -147,6 +147,12 @@ function colidiu(passaro, barreiras) {
     return colidiu
 }
 
+function removeElemento(className) {
+    Array.from(document.querySelectorAll(`.${className}`)).forEach(filho => {
+        document.querySelector('[wm-flappy]').removeChild(filho)
+    })
+}
+
 function FlappyBird() {
     let pontos = 0
 
@@ -163,6 +169,7 @@ function FlappyBird() {
     barreiras.pares.forEach(par => areaJogo.appendChild(par.elemento))
 
     this.start = () => {
+        document.querySelector('[colidiu]').classList.remove('colidiu')
         // loop do jogo
         const temporizador = setInterval(() => {
             barreiras.animar()
@@ -170,10 +177,18 @@ function FlappyBird() {
 
             if (colidiu(passaro, barreiras)) {
                 clearInterval(temporizador)
+                removeElemento('par-de-barreiras')
+                removeElemento('passaro')
+                removeElemento('progresso')
                 document.querySelector('[colidiu]').classList.add('colidiu')
             }
         }, 20)
     }
+}
+
+function restartGame() {
+    
+    new FlappyBird().start()
 }
 
 new FlappyBird().start()
